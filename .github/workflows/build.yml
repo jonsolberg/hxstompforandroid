@@ -51,7 +51,17 @@ jobs:
           path: ${{ env.APK }}
 
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ env.APK }}
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
+          TAG="v$VERSION"
+          # Fixed name, so releases/latest/download/HXStompControl.apk always points at the newest build.
+          cp "$APK" HXStompControl.apk
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$APK" HXStompControl.apk --clobber
+          else
+            gh release create "$TAG" "$APK" HXStompControl.apk --target "$GITHUB_SHA" \
+              --title "HX Stomp Control $VERSION" --notes "Experimental build. Needs Android 8.0+ with USB host (OTG)." --latest
+          fi

@@ -27,7 +27,10 @@ Plug the pedal in and Android offers to open the app; tick *always* to skip the 
 
 ## Download
 
-Get the APK from the latest run of the **Build APK** workflow under *Actions*.
+**[Download the latest APK](https://github.com/jonsolberg/hxstompforandroid/releases/latest/download/HXStompControl.apk)**
+
+All versions are under [Releases](https://github.com/jonsolberg/hxstompforandroid/releases).
+Every push to `main` builds the APK and publishes it there.
 
 ## How it works
 
